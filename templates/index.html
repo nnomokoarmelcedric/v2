@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Meta -->
+    <meta name="description" content="">
+    <meta name="author" content="Themepixels">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.png' %}">
+    <title>index</title>
+
+    <!-- Vendor CSS -->
+
+<link href="{% static 'lib/remixicon/fonts/remixicon.css' %}" rel="stylesheet">
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
+  </head>
+  <body>
+
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <a href="" class="sidebar-logo">
+          <strong><img class="rounded-pill" style="height: 35px;" src="{{user.profile.image.url}}" alt=""> {{user.first_name}} {{user.last_name}}</strong></a>
+        </div>
+
+      <!-- sidebar-header -->
+      <div class="sidebar-body">
+        <label class="sidebar-label">{{user.email}}</label><br>
+
+        <label class="sidebar-label">Requetes  ({{user.profile.role}})</label>
+        <nav class="nav flex-column mb-5">
+          <a href="{% url 'requetes-index-reception'  %}" class="nav-link {% block actif1 %} {% endblock %} " onclick="addActiveClass(this)" ><i class="ri-inbox-line"></i> <span>Boite de reception</span> <small>{{ requetes_recu }}</small></a>
+          <a href="{% url 'requetes-index-envoye' %}" class="nav-link {% block actif2 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-send-plane-2-line"></i> <span>Requetes envoyes</span><small>{{ requetes_envoye }}</small></a>
+          <a href="{% url 'requetes-index-brouillons' %}" class="nav-link {% block actif3 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-draft-line" ></i> <span>Brouillons</span> <small></small></a>
+          <a href="{% url 'requetes-index-corbeille' %}" class="nav-link {% block actif4 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-delete-bin-line"></i> <span>Corbeille</span></a>
+          {% if request.user.is_authenticated %}
+    {% if request.user.profile.role == 'DIRECTEUR' %}
+          <a href="{% url 'index_statistique_directeur' %}" class="nav-link {% block actif5 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-database-line"></i> <span>Statistique</span></a>
+          <a href="{% url 'index-requetes-departement' 1 %}" class="nav-link {% block actif6 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-database-line"></i> <span>3IL</span></a>
+          <a href="{% url 'index-requetes-departement' 2 %}" class="nav-link {% block actif7 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-database-line"></i> <span>TIC</span></a>
+          <a href="{% url 'index-requetes-departement' 3  %}" class="nav-link {% block actif8 %} {% endblock %}" onclick="addActiveClass(this)"><i class="ri-database-line"></i> <span>BTS</span></a>
+
+    {% else %}
+          
+    {% endif %}
+    {% endif %}
+
+        </nav>
+
+        <label class="sidebar-label">Autres</label>
+        <nav class="nav flex-column mb-5">
+            
+          <a href="{% url 'logout' %}" class="nav-link" target="_self"><i class="ri-logout-box-line"></i> <span>Se Deconnecter</span></a>
+        </nav>
+      </div><!-- sidebar-body -->
+    </div><!-- sidebar -->
+
+    <div class="mailbox">
+      <div class="mailbox-header">
+        <a href="#" class="mailbox-menu"><i class="ri-menu-2-fill"></i></a>
+        <div class="mailbox-search">
+          <i class="ri-search-line"></i>
+          <input type="search" class="form-control" placeholder="Rechercher une requete">
+        </div><!-- mailbox-search -->
+        <a href="#" class="mail-avatar"><span><img class="rounded-pill" style="height: 35px;" src="{{user.profile.image.url}}" alt=""></span></a>
+      </div><!-- mailbox-header -->
+
+      <div class="mailbox-option">
+        <div class="mailbox-select dropdown">
+          <a href="" class="dropdown-check">
+            <i class="ri-checkbox-blank-line"></i>
+            <i class="ri-checkbox-fill"></i>
+            <i class="ri-checkbox-indeterminate-fill"></i>
+          </a>
+          <a href="" class="dropdown-link" data-bs-toggle="dropdown"><i class="ri-arrow-down-s-line"></i></a>
+          <div class="dropdown-menu">
+            <a href="" class="dropdown-item all"><i class="ri-check-fill"></i> Tout</a>
+            <a href="" class="dropdown-item none active"><i class="ri-check-line"></i> Aucun</a>
+            <a href="" class="dropdown-item read"><i class="ri-check-line"></i> lu</a>
+            <a href="" class="dropdown-item unread"><i class="ri-check-line"></i> non lus</a>
+            <a href="" class="dropdown-item starred"><i class="ri-check-line"></i> important</a>
+          </div><!-- dropdown-menu -->
+          {% if requetes_non_lu != 0 %}
+          <div class=" ms-3 alert alert-success">vous avez {{ requetes_non_lu }} requetes non lu</div>
+          {% endif %}
+        </div><!-- mailbox-select -->
+
+      
+      </div><!-- mailbox-option -->
+      <ul id="mailGroup" class="mail-group">
+        {% for requete in requetes %} 
+        <li class="mail-item {% block lu %}{% endblock %}" onclick="handleClickMailItem()" >
+
+          <div class="mail-avatar"><img class="rounded-pill" style="height: 35px;" src="{{requete.destinataire.utilisateur.profile.image.url}}" alt=""></div>
+          <div class="mail-item-body">
+            <div class="d-flex align-items-center">
+
+              <span class="mail-sender">{{requete.destinataire.utilisateur.username}}</span>
+              <span class="mail-time">{{requete.date_soumission}}</span>
+              <span class="mail-star"><i class="ri-star-line"></i><i class="ri-star-fill"></i></span>
+            </div>
+            <h6 class="mail-subject">{{requete.type}} <span>2</span></h6>
+            <p class="mail-text">{{requete.objet}}</p>
+          </div><!-- mail-item-body -->
+         
+
+<form id="myForm" method="POST" action="{% block link1 %} {% endblock %}">
+            {% csrf_token %}
+            <input type="text" name="requeteId" value="{{requete.id}}" hidden>
+          </form>
+          
+    </li>
+
+
+
+
+       {% endfor%}
+       
+      </ul><!-- mail-group -->
+
+    </div><!-- mailbox -->
+    {% block right %}
+    
+    {% endblock  %}
+    
+  
+   
+    <a href="" class="menu-compose"><i class="ri-pencil-line"></i></a>
+  
+    <form action="{% url 'soumettre-requete' %}" method="POST">
+      {% csrf_token %}
+    <div class="compose d-none">
+      <div class="compose-content">
+        <div class="compose-header">
+          <h6 class="compose-title">Nouvelle requete</h6>
+          <nav class="nav">
+            <a href="#" class="nav-link nav-link-minimize"><i class="ri-subtract-line"></i></a>
+            <a href="#" class="nav-link nav-link-fullscreen">
+              <i class="ri-fullscreen-line"></i>
+              <i class="ri-fullscreen-exit-line"></i>
+            </a>
+            <a href="#" class="nav-link nav-link-close"><i class="ri-close-line"></i></a>
+          </nav>
+        </div><!-- compose-header -->
+        <div class="compose-body">
+          <div class="form-group">
+            <select name="service" id="selectService" class="form-control">
+            <option value="">Service</option>
+            {% for service in services %}
+            <option value="{{ service.id }}">{{ service.nom}}</option>    
+            {% endfor%}        
+          </select>
+        </div>
+          <div class="form-group">
+            <select name="departement" id="selectDepartement" class="form-control">
+            <option value="">Departement</option>
+            {% for departement in departements%}
+            <option value="{{ departement.id}}">{{ departement.nom}}</option>    
+            {% endfor%}           
+          </select>
+        </div>
+        <div class="form-group">
+          <select name="destinataire" id="selectEnseignant" class=" form-control">
+          <option value="">Enseignant</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <select name="type" id="selectType" class=" form-control">
+        <option value="">Type</option>
+        <option value="DEMANDE DE DIPLOME">DEMANDE DE DIPLOME</option>        
+        <option value="DEMANDE DE CORRECTION DE NOTE">DEMANDE DE CORRECTION DE NOTE</option>        
+        <option value="DEMANDE DE TRANSFERT DE FILIERE">DEMANDE DE TRANSFERT DE FILIERE</option>        
+        <option value="DEMANDE DE REEXAMEN">DEMANDE DE REEXAMEN</option>        
+        <option value="DEMANDE D'ORIENTATION ACADEMIQUE">DEMANDE D'ORIENTATION ACADEMIQUE</option>        
+        <option value="DEMANDE DE SOUTIENT PEDAGOGIQUE">DEMANDE DE SOUTIENT PEDAGOGIQUE</option>        
+        <option value="DEMANDE D'UNE AUTORISATION D'ABSENCE">DEMANDE D'UNE AUTORISATION D'ABSENCE</option>        
+        <option value="JUSTIFICATION D'ABSENCES">JUSTIFICATION D'ABSENCES</option>        
+        <option value="AUTRES">AUTRES</option>        
+               
+      </select>
+    </div>
+          <div class="form-group"><input type="text" name="preciser" id="Preciser" class="form-control" placeholder="Preciser le type de requete"></div>
+          <div class="form-group"><input type="text"  name="objet" class="form-control" placeholder="objet de la requete"></div>
+          <div class="form-group"><textarea class="form-control" name="contenu" rows="10"  placeholder="CORPS DE LA REQUETE"></textarea></div>
+        </div><!-- compose-body -->
+        <nav class="nav nav-toolbar">
+
+          <i class="ri-attachment-2"><input type="file" name="documents" class="form-control" id="file"></i>
+          
+        </nav><!-- nav-toolbar -->
+        <div class="compose-footer">
+          <button type="submit" name="submit" class="btn btn-primary btn-icontext"><i class="ri-send-plane-fill me-2"></i> Soumettre</button>
+          <button class="btn btn-white btn-icon"><i class="ri-delete-bin-line"></i></button>
+    </form>
+
+        </div><!-- compose-footer -->
+      </div><!-- compose-content -->
+    </div><!-- compose -->
+
+    <div class="backdrop"></div>
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/script.js' %}"></script>
+    <script src="https://cdnjs.com/libraries/Chart.js"></script>
+
+  </body>
+</html>

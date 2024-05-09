@@ -1,0 +1,36 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %} Login  Page {% endblock%}
+{% load crispy_forms_tags %}
+
+{% block content%}
+<div class="container ">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+         
+            <div class=" p-5 bg-white  border-start  border-5  shadow-lg  border-primary"  >
+                <h4><img src="{% static 'apple-touch-icon.png' %}" alt="" class="w-25 me-2">QueryMaster</h4>
+                <hr>
+                
+                <form method="POST">
+                  
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Nom d'utilisateur</label>
+                      <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
+                      <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                    </div>
+                   
+                    <button type="submit" class="btn  border border-3 border-primary btn-primary"><i class="ri-login-box-line m-2"></i>CONNEXION</button>
+                    <a  href="{% url 'logout' %}" class="ms-2 btn  border border-3 border-danger btn-danger"><i class="x-typ-cancel P-auto"></i>ANNULER</a>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

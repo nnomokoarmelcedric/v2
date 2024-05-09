@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% block actif1 %} {% endblock %}
+{% block actif2 %}active {% endblock %}
+{% block actif3 %} {% endblock %}
+{% block actif4 %} {% endblock %}
+{% block link1 %} {% url 'requetes-index-envoye' %}{% endblock %}
+
+{% block right %}
+<div id="ma-div" data-ma-variable="T"></div>
+<div id="mailContent" class="mailcontent">
+    <div class="mailcontent-subject ">
+      <nav class="nav">
+        <a id="mailBack" href="#" class="nav-link"><i class="ri-arrow-left-line"></i></a>
+
+        <a href="#" class="nav-link" data-bs-toggle="tooltip" title="supprimer" data-bs-placement="left"><i class="ri-delete-bin-5-line"></i></a>
+        <a href="#" class="nav-link" data-bs-toggle="tooltip" title="marquer important" data-bs-placement="left"><i class="ri-star-line"></i></a>
+      </nav>
+      <h4>{{requete.objet}}</h4>
+    </div><!-- mailcontent-subject -->
+    <div class="mailcontent-group ">
+      
+      <div class="mailcontent-item">
+        <div class="mailcontent-header">
+          <div class="mail-avatar"><span class="bg-primary">m</span></div>
+          <div class="mailcontent-sender">
+            <h6>{{requete.expediteur.utilisateur.username}} <span>&lt;{{requete.expediteur.utilisateur.email}}&gt;</span></h6>
+            <p>A: {{requete.destinataire.utilisateur.username}}</p>
+          </div><!-- mail-sender -->
+          <div class="mailcontent-time">{{requete.date_soumission}}<span> </span></div>
+          <nav class="nav">
+            <a href="#" class="nav-link" data-bs-toggle="tooltip" title="Transferer"><i class="ri-share-forward-line me-1"></i></a>
+            <a href="#" class="nav-link" data-bs-toggle="tooltip" title="Repondre"><i class="ri-reply-line"></i></a>
+            <a href="#" class="nav-link" data-bs-toggle="tooltip" title="plus"><i class="ri-more-2-fill"></i></a>
+          </nav>
+        </div><!-- mailcontent-header -->
+        <div class="mailcontent-body">
+
+              <p>{{requete.contenu}}</p>
+
+          <hr>
+          <div class="d-inline">
+            statut actuel: {{ requete.statut}}
+           </div>
+           <br>
+           <hr>
+           {% if requete.remarque %}
+           <div>Reponse:{{ requete.remarque}}</div>
+           {% endif %}
+          {% if requete.documents %}
+          <label class="mailcontent-label">1 piece jointes</label>
+          
+          <div class="attachment-group">
+            
+            <div class="attachment-item">
+               
+              <div class="attachment-icon text-success"><i class="ri-file-zip-line"></i></div>
+            
+              <div class="attachment-body">
+                <h6><a href="{{ requete.documents.url }}" download>{{ requete.documents.name }}</a></h6>
+                
+              </div>
+            
+            
+            </div><!-- attachment-item -->
+          </div><!-- attachment-group -->
+          {% endif  %}
+
+        </div><!-- mailcontent-body -->
+      </div><!-- mailcontent-item -->
+    </div><!-- mailcontent-group -->
+    
+  
+    <div class="mailcontent-footer ">
+      <a href="#" class="btn btn-secondary btn-icontext"><i class="ri-reply-line me-1"></i> Repondre</a>
+      <a href="" class="btn btn-secondary btn-icontext"><i class="ri-share-forward-line me-1"></i> Transferer</a>
+    </div><!-- mailcontent-footer -->
+
+    <div class="mailcontent-placeholder d-none">
+      <i class="ri-mail-send-line"></i>
+      <h5>Aucune requete n'a ete selectionne</h5>
+    </div><!-- mailcontent-placeholder -->
+  </div><!-- mailcontent -->
+{% endblock %}

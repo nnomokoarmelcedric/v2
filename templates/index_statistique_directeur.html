@@ -1,0 +1,135 @@
+{% extends 'index.html' %}
+{% block actif1 %} {% endblock %}
+{% block actif2 %}{% endblock %}
+{% block actif3 %} {% endblock %}
+{% block actif4 %} {% endblock %}
+{% block actif5 %}active {% endblock %}
+{% block link1 %} {% url 'requetes-index-envoye' %}{% endblock %}
+
+{% block right %}
+<style>
+  .my-card:hover{
+      transform: scale(1.1);
+      transition: 0.2s ease-in-out;
+  }
+  
+</style>
+<div id="mailContent" class="mailcontent">
+    
+    
+      
+  <div class="m-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+          Statistiques
+      </div>
+   
+
+      <div class="card-body">
+          <div class="row">
+           <div class="col-md-4 ">
+              <a href="" class="text-decoration-none text-dark">
+                  <div class="card my-card shadow text-center p-3">
+                      <h4>TIC <i class="fa-solid fa-users"></i> </h4>
+                      <h3>0</h3>
+                  </div>
+              </a>
+           </div>
+           <div class="col-md-4 ">
+              <a href="" class="text-decoration-none text-dark">
+                  <div class="card my-card shadow text-center p-3">
+                      <h4>3IL<i class="fa-solid fa-box"></i> </h4>
+                      <h3>{{ requetes_3il}}</h3>
+                  </div>
+              </a>
+           </div>
+           <div class="col-md-4 ">
+              <a href="" class="text-decoration-none text-dark">
+                  <div class="card my-card shadow text-center p-3">
+                      <h4>BTS <i class="fa-solid fa-truck-fast"></i> </h4>
+                      <h3>0</h3>
+                  </div>
+              </a>
+           </div>
+          </div>
+      </div>
+   
+
+      </div>
+      <div class="row m-2 mt-5">
+        <div class="col-md-6">
+          <div class="bg-white">
+             
+            <canvas id="myChart1" ></canvas>
+          
+          
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          
+          <script>
+            const ctx = document.getElementById('myChart1').getContext('2d');
+ 
+            new Chart(ctx, {
+              type: 'pie',
+              data: {
+                labels: ['en attente de traitement','en cours de traitement','accepte','en appel','refuse','cloture',"complement d'information"],
+             
+                datasets: [{
+                  label: 'Requetes',
+                  data: [{{ at_3IL }},{{ ct_3IL }},{{ accepte_3IL }},{{ appel_3IL }},{{ refuse_3IL }},{{ cloture_3IL }},{{ aci_3IL }}],
+                  
+                  borderWidth: 3
+                }]
+              },
+              options: {
+                aspectRatio:1/0.75,
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          </script>
+           </div>
+        </div>
+        <div class="col-md-6">
+          <div class="bg-white">
+            <div>
+                <canvas id="myChart" width="400" height="300"></canvas>
+              </div>
+              
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              
+              <script>
+                const ctx2 = document.getElementById('myChart');
+              
+                new Chart(ctx2, {
+                  type: 'bar',
+                  data: {
+                    labels: ['admission','inscription','reevaluation'],
+                    datasets: [{
+                      label: 'Requetes',
+                      data: [25,14,12],
+                      borderWidth: 1
+                    }]
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true
+                      }
+                    }
+                  }
+                });
+              </script>
+               </div>
+        </div>
+      </div>
+  </div>
+  </div>
+       
+      <i class="ri-mail-send-line"></i>
+      
+    
+  </div><!-- mailcontent -->
+{% endblock %}

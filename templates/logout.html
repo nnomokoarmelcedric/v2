@@ -1,0 +1,29 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %} Login  Page {% endblock%}
+{% load crispy_forms_tags %}
+
+{% block content%}
+<div class="container ">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+         
+            <div class=" p-5 bg-white  border-start  border-5  shadow-lg  border-primary"  >
+                <h4><img src="{% static 'apple-touch-icon.png' %}" alt="" class="w-25 me-2">QueryMaster</h4>
+                <hr>
+                
+                
+                  
+                  <div class="alert alert-danger">
+                  <h4>Vous êtes déconnecté</h4>
+              
+              </div>
+              <a href="{% url 'login' %}" class="btn btn-primary">CONNEXION</a>
+
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
